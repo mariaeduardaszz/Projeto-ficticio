@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Restaurante Gastronômico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- MODAL DE VERIFICAÇÃO DE IDADE -->
+    <div id="ageModal" class="modal">
+        <div class="modal-content">
+            <h2>Verificação de Idade</h2>
+            <p>Para acessar o sistema, você deve ter 18 anos ou mais.</p>
+            <form id="ageForm">
+                <label for="birthDate">Data de Nascimento:</label>
+                <input type="date" id="birthDate" required>
+                <p id="ageError" class="error-message"></p>
+                <button type="submit" class="btn btn-primary">Verificar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TELA DE LOGIN -->
+    <div id="loginScreen" class="screen hidden">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <svg class="icon-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                    </svg>
+                    <h1>Restaurante Gastronômico</h1>
+                </div>
+                <p class="subtitle">Sistema de Gestão e Atendimento</p>
+            </div>
+
+            <div class="login-tabs">
+                <button class="tab-btn active" data-tab="customer">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Acesso Cliente
+                </button>
+                <button class="tab-btn" data-tab="staff">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/>
+                        <line x1="6" y1="17" x2="18" y2="17"/>
+                    </svg>
+                    Acesso Restaurante
+                </button>
+            </div>
+
+            <!-- TAB CLIENTE -->
+            <div id="customerTab" class="tab-content active">
+                <div class="card">
+                    <h2>Bem-vindo!</h2>
+                    <p class="card-description">Acesse o cardápio digital da sua mesa</p>
+                    <form id="customerLoginForm">
+                        <div class="form-group">
+                            <label for="customerName">Seu Nome</label>
+                            <input type="text" id="customerName" placeholder="Digite seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tableNumber">Número da Mesa</label>
+                            <input type="number" id="tableNumber" placeholder="Ex: 5" min="1" max="50" required>
+                        </div>
+                        <div class="info-box">
+                            💡 <strong>Dica:</strong> O número da mesa está no QR Code sobre a mesa.
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Acessar Cardápio</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB STAFF -->
+            <div id="staffTab" class="tab-content">
+                <div class="card">
+                    <h2>Acesso Administrativo</h2>
+                    <p class="card-description">Faça login para gerenciar o restaurante</p>
+                    <form id="staffLoginForm">
+                        <div class="form-group">
+                            <label for="staffEmail">E-mail</label>
+                            <input type="email" id="staffEmail" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="staffPassword">Senha</label>
+                            <input type="password" id="staffPassword" placeholder="••••••••" required>
+                        </div>
+                        <div class="info-box">
+                            🔒 <strong>Demo:</strong> Use qualquer e-mail e senha para acessar
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Entrar no Sistema</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERFACE DO CLIENTE -->
+    <div id="customerInterface" class="screen hidden">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <svg class="icon-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                    </svg>
+                    <div>
+                        <h1>Restaurante Gastronômico</h1>
+                        <p id="tableInfo">Mesa -</p>
+                    </div>
+                </div>
+                <button class="btn btn-outline" id="logoutBtn">Sair</button>
+            </div>
+        </header>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-view="menu">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                </svg>
+                <span>Cardápio</span>
+            </button>
+            <button class="nav-btn" data-view="orders">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span>Comanda</span>
+                <span id="orderBadge" class="badge hidden">0</span>
+            </button>
+            <button class="nav-btn" data-view="call">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+                <span>Chamar</span>
+            </button>
+            <button class="nav-btn" data-view="payment">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+                <span>Pagar</span>
+            </button>
+        </nav>
+
+        <main class="app-main">
+            <!-- VIEW CARDÁPIO -->
+            <div id="menuView" class="view active">
+                <div class="search-bar">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Buscar pratos...">
+                </div>
+
+                <div id="cartSummary" class="cart-summary hidden">
+                    <div class="cart-info">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        <span id="cartCount">0 itens no carrinho</span>
+                    </div>
+                    <span id="cartTotal" class="cart-total">R$ 0,00</span>
+                </div>
+
+                <div class="category-tabs" id="categoryTabs"></div>
+                <div id="menuItems" class="menu-grid"></div>
+            </div>
+
+            <!-- VIEW COMANDA -->
+            <div id="ordersView" class="view">
+                <h2>Minha Comanda</h2>
+                <p class="view-subtitle">Acompanhe seus pedidos em tempo real</p>
+                <div id="ordersList"></div>
+            </div>
+
+            <!-- VIEW CHAMAR GARÇOM -->
+            <div id="callView" class="view">
+                <div class="card call-card">
+                    <h2>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        </svg>
+                        Chamar Atendimento
+                    </h2>
+                    <p id="waiterInfo">Mesa - • Atendente: Garçom</p>
+                    
+                    <button class="btn btn-primary btn-lg" id="callWaiterBtn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        </svg>
+                        Chamar Garçom Agora
+                    </button>
+
+                    <div id="lastCallInfo" class="last-call hidden"></div>
+
+                    <div class="quick-requests">
+                        <p><strong>Solicitações Rápidas:</strong></p>
+                        <div class="quick-buttons">
+                            <button class="btn-quick" data-request="Mais água">💧 Mais água</button>
+                            <button class="btn-quick" data-request="Guardanapos">🧻 Guardanapos</button>
+                            <button class="btn-quick" data-request="Talheres">🍴 Talheres</button>
+                            <button class="btn-quick" data-request="Conta">💳 Conta</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Dicas de Atendimento</h3>
+                    <ul class="tips-list">
+                        <li>• Use o botão de chamada rápida para chamar o garçom à sua mesa</li>
+                        <li>• Faça solicitações específicas para pedidos mais detalhados</li>
+                        <li>• Nosso tempo médio de resposta é de 2-5 minutos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- VIEW PAGAMENTO -->
+            <div id="paymentView" class="view">
+                <div class="card">
+                    <h2>Finalizar Pagamento</h2>
+                    <p class="card-description">Revise sua conta e escolha a forma de pagamento</p>
+                    
+                    <div class="bill-summary">
+                        <div class="bill-row">
+                            <span>Subtotal</span>
+                            <span id="billSubtotal">R$ 0,00</span>
+                        </div>
+                        <div class="bill-row">
+                            <span>Taxa de serviço (10%)</span>
+                            <span id="billService">R$ 0,00</span>
+                        </div>
+                        <div class="bill-row bill-total">
+                            <span>Total</span>
+                            <span id="billTotal">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <div id="paymentMethods">
+                        <h3>Forma de Pagamento</h3>
+                        <div class="payment-options">
+                            <button class="payment-option" data-method="credit">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                <div>
+                                    <strong>Cartão de Crédito</strong>
+                                    <small>Parcelamento disponível</small>
+                                </div>
+                            </button>
+                            <button class="payment-option" data-method="debit">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                <div>
+                                    <strong>Cartão de Débito</strong>
+                                    <small>À vista</small>
+                                </div>
+                            </button>
+                            <button class="payment-option" data-method="pix">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                    <line x1="12" y1="18" x2="12" y2="18"/>
+                                </svg>
+                                <div>
+                                    <strong>PIX</strong>
+                                    <small>Instantâneo</small>
+                                </div>
+                            </button>
+                            <button class="payment-option" data-method="cash">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                <div>
+                                    <strong>Dinheiro</strong>
+                                    <small>Em espécie</small>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg" id="confirmPaymentBtn">Confirmar Pagamento</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- CARRINHO FIXO -->
+        <div id="cartFixed" class="cart-fixed hidden">
+            <div class="cart-fixed-content">
+                <div class="cart-fixed-info">
+                    <p id="cartFixedCount">0 itens</p>
+                    <p id="cartFixedTotal" class="cart-fixed-total">R$ 0,00</p>
+                </div>
+                <button class="btn btn-primary" id="makeOrderBtn">Fazer Pedido</button>
+            </div>
+            <p class="cart-warning">Você terá 10 segundos para cancelar após confirmar</p>
+        </div>
+    </div>
+
+    <!-- INTERFACE ADMINISTRATIVA -->
+    <div id="staffInterface" class="screen hidden">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <svg class="icon-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                    </svg>
+                    <div>
+                        <h1>Sistema RestauranteX</h1>
+                        <p>Gestão Completa</p>
+                    </div>
+                </div>
+                <button class="btn btn-outline" id="staffLogoutBtn">Sair</button>
+            </div>
+        </header>
+
+        <div class="staff-content">
+            <div class="staff-sidebar">
+                <button class="staff-nav-btn active" data-section="dashboard">Dashboard</button>
+                <button class="staff-nav-btn" data-section="orders">Pedidos</button>
+                <button class="staff-nav-btn" data-section="menu">Cardápio</button>
+                <button class="staff-nav-btn" data-section="reservations">Reservas</button>
+            </div>
+
+            <div class="staff-main">
+                <div id="staffDashboard" class="staff-section active">
+                    <h2>Dashboard - Visão Geral</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Pedidos Hoje</h3>
+                            <p class="stat-number">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Faturamento</h3>
+                            <p class="stat-number">R$ 0,00</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Mesas Ocupadas</h3>
+                            <p class="stat-number">0/20</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Reservas Hoje</h3>
+                            <p class="stat-number">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="staffOrders" class="staff-section">
+                    <h2>Gerenciar Pedidos</h2>
+                    <div id="staffOrdersList"></div>
+                </div>
+
+                <div id="staffMenu" class="staff-section">
+                    <h2>Gerenciar Cardápio</h2>
+                    <button class="btn btn-primary" id="addMenuItemBtn">+ Adicionar Item</button>
+                    <div id="staffMenuItems"></div>
+                </div>
+
+                <div id="staffReservations" class="staff-section">
+                    <h2>Reservas</h2>
+                    <p>Sistema de reservas em desenvolvimento</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CUSTOMIZAÇÃO -->
+    <div id="customizeModal" class="modal hidden">
+        <div class="modal-content modal-large">
+            <button class="modal-close" id="closeCustomizeModal">&times;</button>
+            <h2>Personalizar Pedido</h2>
+            <p id="customizeItemName"></p>
+
+            <div class="customize-section">
+                <label>Quantidade:</label>
+                <div class="quantity-control">
+                    <button class="btn-quantity" id="decreaseQty">-</button>
+                    <span id="itemQuantity">1</span>
+                    <button class="btn-quantity" id="increaseQty">+</button>
+                </div>
+            </div>
+
+            <div class="customize-section">
+                <label>Adicionar (+R$ 5,00 cada):</label>
+                <div id="additionsList" class="checkbox-list"></div>
+            </div>
+
+            <div class="customize-section">
+                <label>Remover ingredientes:</label>
+                <div id="removalsList" class="checkbox-list"></div>
+            </div>
+
+            <div class="customize-section">
+                <label for="specialNotes">Observações especiais:</label>
+                <textarea id="specialNotes" rows="3" placeholder="Ex: Ponto da carne, alergias..."></textarea>
+            </div>
+
+            <div class="modal-total">
+                <span>Total:</span>
+                <span id="customizeTotal">R$ 0,00</span>
+            </div>
+
+            <button class="btn btn-primary btn-lg" id="addToCartBtn">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <!-- NOTIFICAÇÕES -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
